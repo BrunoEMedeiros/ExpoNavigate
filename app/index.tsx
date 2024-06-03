@@ -1,7 +1,24 @@
-import { Image, View, StyleSheet, Text, Pressable } from "react-native";
-import { Link } from 'expo-router'
-import { Input, Icon } from 'react-native-elements'
+import { 
+    View, 
+    StyleSheet, 
+    Alert } from "react-native";
+
+import { 
+    Link, 
+    router } from 'expo-router'
+
+import { Icon } from 'react-native-elements'
 import { useEffect, useState } from "react";
+import { apiConfig } from "@/utils/api";
+import { 
+    Botao, 
+    Formulario, 
+    ImagemLogo, 
+    InputReactElements, 
+    Tela, 
+    Texto } from "./style";
+import { ThemeProvider } from "styled-components";
+import { lightTheme } from "@/theme";
 
 export default function LoginPage()
 {
@@ -9,74 +26,93 @@ export default function LoginPage()
     const [passwordVisible, SetPasswordVisible] = useState(true)
 
     //States feitos para controlar oque o usuario esta digitando nos Inputs
-    //Esta sendo colocado um valor inicial apenas por uma questao estética
-    //para manter o if de validação no useEffect com a mesma lógica.
-    const [email, SetEmail] = useState('someemail@')
-    const [password, SetPassword] = useState('1234567890')
+    // Por questão visual apenas, foi colocado valores iniciais quaisquer nos states 
+    const [email, setEmail] = useState('@')
+    const [password, setPassword] = useState('_password_')
 
-    //Campos feitos para controlar as mensagens de erro ao usuario
-    const [errorEmailField, SetErrorEmailField] = useState('')
-    const [errorPassField, SetErrorPassField] = useState('')
-
-    // function validateFormLogin(email: string, senha: string)
-    // {
-    //     if(!email.trim().includes('@') || email == "" || email == null)
-    //         SetErrorEmailField('Insira um email valido!')
-    //     else
-    //         SetErrorEmailField('')
-    //     if(senha.length < 10 || senha.length > 10 || senha == "" || senha == null)
-    //         SetErrorPassField('Senha invalida!')
-    //     else
-    //         SetErrorPassField('')
-
-    // }
+    //Campos feitos para controlar se os campos tem de erro
+    const [isEmailError, setIsEmailError] = useState(false)
+    const [isPasswordError, setIsPasswordError] = useState(false)
 
     useEffect(() => {
-        if(!email.trim().includes('@') || email == "" || email == null)
-            SetErrorEmailField('Insira um email valido!')
+        if(!email.trim().includes('@') || email == null)
+            setIsEmailError(true)
         else
-            SetErrorEmailField('')
-        if(password.length < 10 || password.length > 10 || password == "" || password == null)
-            SetErrorPassField('Senha invalida!')
+            setIsEmailError(false)
+        if(password.length != 10 || password == null)
+            setIsPasswordError(true)
         else
-            SetErrorPassField('')
+            setIsPasswordError(false)
     }, [email, password]);
 
+    //Função usada pra enviar o post para a rota da api responsavel pelo login
+    async function login()
+    {
+        if(!isPasswordError && !isEmailError && email != '@' && password != '_password_')
+        {
+            try
+            {
+                //Ja que a API é padrão para todo o sistema, isolei as configurações gerais
+                //e apenas importo elas aonde preciso e uso o método http que eu quero
+
+                let res = await apiConfig.post('/login',{
+                    email: email,
+                    senha: password
+                });
+
+                if(res.status == 204){
+                    return Alert.alert('Ops...','Usuario ou senha incorretos!',
+                        [
+                            {
+                                text: 'Ok'
+                            }
+                        ]
+                    )
+                }
+                else
+                    router.replace('/home')
+            }
+            catch(error)
+            {
+                console.log(error)
+                throw new Error('Erro ao logar... :(');        
+            }
+        }
+    }
+
     return(
-        <View style={estilo.tela}>
-            <View style={estilo.form}>
-                <Image
-                    style={estilo.imagem}
+    <ThemeProvider theme={lightTheme}>
+        <Tela>
+            <Formulario>
+                {/* Eu sei que a imagem não ficou mt bonita */}
+                <ImagemLogo
                     source={require('../assets/images/sesi.jpg')}
-                    resizeMode="stretch"
                 />
-                <Input 
-                    style={estilo.text_input}
+                <InputReactElements 
                     placeholder="Digite o email..."
                     label="Email"
-                    errorMessage={errorEmailField}
+                    onChangeText={text => setEmail(text)}
+                    errorMessage={isEmailError ? 'Email invalido!' : ''}
                     inputContainerStyle={
-                        errorEmailField == '' ?
+                        !isEmailError?
                         estilo.input_container
                         :
                         estilo.input_container_error
                     }
-                    onChangeText={text => SetEmail(text)}
                 />
-                <Input 
-                    style={estilo.text_input}
+                <InputReactElements 
                     placeholder="Digite a senha..."
                     label="Senha"
+                    onChangeText={text => setPassword(text)}
                     secureTextEntry={passwordVisible}
-                    errorMessage={errorPassField}
+                    errorMessage={isPasswordError ? 'Senha invalida!' : ''}
                     maxLength={10}
                     inputContainerStyle={
-                        errorPassField == '' ?
+                        !isPasswordError?
                         estilo.input_container
                         :
                         estilo.input_container_error
                     }
-                    onChangeText={text => SetPassword(text)}
                     rightIcon={
                         passwordVisible ? 
                         <Icon 
@@ -96,50 +132,41 @@ export default function LoginPage()
                 />
                 <View style={estilo.view_botoes}>
                     <Link href='(user)/cadastro' asChild>
-                        <Pressable style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-                            <Text>Cadastrar-se</Text>
-                        </Pressable>
+                        <Botao>
+                            <Texto>Cadastrar-se</Texto>
+                        </Botao>
                     </Link>
-                    <Pressable style={estilo.botoes}>
-                        <Text style={estilo.texto_botoes}>Entrar</Text>
-                    </Pressable>              
+                    {/* 
+                        Aqui eu uso um truque interessante, o styled component 
+                        esta preparado para receber o theme que vem do ThemeProvider,
+                        como o proprio Botao tambem recebe uma propriedade que eu uso
+                        para controlar a cor de fundo dele.
+                        Essas propriedades devem ser inserirdas diretamente 
+                        no styled component e serem usadas por lá
+                     */}
+                    <Botao 
+                        actionButton 
+                        onPress={()=> login()}>
+                        <Texto>Entrar</Texto>
+                    </Botao>              
                 </View>
-            </View>
-        </View>
+            </Formulario>
+        </Tela>
+    </ThemeProvider>
     )
 }
 
+/*  
+    Existem estilos ou configurações particulares que não necessitam
+    serem generalizadas em styled components especificos
+    entao para estas eu mantenho a estilização em linha tradicional
+*/
+
 const estilo = StyleSheet.create({
-    tela: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 30
-    },
-    form: {
-        gap: 6,
-        padding: 22,
-        width: '100%', 
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        shadowColor: '#171717',
-        shadowOffset: {width: -2, height: 4},
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-    },
-    imagem: {
-        width: '100%',
-        height: 60,
-        borderRadius: 10,
-        marginBottom: 20,  
-    },
-    text_input: {
-        height: 60,
-        borderRadius: 20,
-        width: '100%'
-    },
+
+    //Efeito de troca do estilo interno do input 
+    //ao encontrar ou nao erro na validação
+
     input_container : {
         borderWidth: 0
     },
@@ -150,32 +177,12 @@ const estilo = StyleSheet.create({
         padding: 10,
         marginTop: 10
     },
+
+    //Uma view simples qualquer apenas para alinhas os botoes com a tela
     view_botoes: {
-        //marginTop: 10,
-        //flexDirection: 'row', 
         width: '100%',
         gap: 15,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    botoes : {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 15,
-        backgroundColor: 'red',
-        borderRadius: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-        width: 0,
-        height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    texto_botoes : {
-        color: 'white',
-        fontSize: 20
-    }
 })
