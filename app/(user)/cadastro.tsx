@@ -1,15 +1,19 @@
 import { Input, Icon } from 'react-native-elements'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useEffect, useState } from 'react'
+import { apiConfig } from '@/utils/api'
+import { router, useRouter } from 'expo-router'
 
 export default function CadastroUsuario()
 {
+    const router = useRouter();
+
     const [passwordVisible, SetPasswordVisible] = useState(true)
 
     const [nome, setNome] = useState('some_name')
-    const [email, setEmail] = useState('some@email.com')
-    const [password, setPassword] = useState('1234567890')
-    const [confirmPassword, setConfirmPassword] = useState('1234567890')
+    const [email, setEmail] = useState('@')
+    const [password, setPassword] = useState('_password_')
+    const [confirmPassword, setConfirmPassword] = useState('_password_')
 
     const [errorNome, setErrorNome] = useState('')
     const [errorEmail, setErrorEmail] = useState('')
@@ -40,6 +44,45 @@ export default function CadastroUsuario()
             setErrorConfirmPassword('')
         
     }, [nome, email, password, confirmPassword]);
+
+    async function storeUser(){
+        if(errorNome == '' && 
+        errorEmail == '' && 
+        errorPassword == '' &&
+        errorConfirmPassword == '')
+        {
+            try{
+                let resposta = await apiConfig.post('/user/novo',{
+                    nome: nome,
+                    email: email,
+                    senha: password,
+                })
+
+                if(resposta.status == 200)
+                {
+                    return Alert.alert('Ok','Usuario cadastrado!',
+                    [
+                        {
+                            text: 'Ok',
+                            onPress: ()=> router.dismiss(1)
+                        }
+                    ])
+                }
+                else
+                {
+                    return Alert.alert('Ops...','Email ja cadastrado!',
+                    [
+                        {
+                            text: 'Ok',
+                        }
+                    ])  
+                }
+            }
+            catch(error){
+
+            }
+        }
+    }
 
     return (
         <View style={estilo.tela}>
@@ -156,7 +199,7 @@ export default function CadastroUsuario()
                         />
                     }  
                 />
-                <Pressable style={ estilo.botoes }>
+                <Pressable style={ estilo.botoes } onPress={()=> storeUser()}>
                     <Text style={estilo.texto_botoes}>Confirmar</Text>
                 </Pressable>
             </View>

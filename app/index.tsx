@@ -1,7 +1,8 @@
 import { 
     View, 
     StyleSheet, 
-    Alert } from "react-native";
+    Alert,
+    Platform } from "react-native";
 
 import { 
     Link, 
@@ -70,7 +71,13 @@ export default function LoginPage()
                     )
                 }
                 else
-                    router.replace('/home')
+                    return Alert.alert('Ola','Bem vindo',
+                    [
+                        {
+                            text: 'Ok'
+                        }
+                    ]
+            )
             }
             catch(error)
             {
@@ -81,7 +88,7 @@ export default function LoginPage()
     }
 
     return(
-    <ThemeProvider theme={lightTheme}>
+        <ThemeProvider theme={lightTheme}>
         <Tela>
             <Formulario>
                 {/* Eu sei que a imagem não ficou mt bonita */}
