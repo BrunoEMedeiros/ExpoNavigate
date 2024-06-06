@@ -2,7 +2,7 @@ import { Input, Icon } from 'react-native-elements'
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useEffect, useState } from 'react'
 import { apiConfig } from '@/utils/api'
-import { router, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 
 export default function CadastroUsuario()
 {
@@ -15,41 +15,44 @@ export default function CadastroUsuario()
     const [password, setPassword] = useState('_password_')
     const [confirmPassword, setConfirmPassword] = useState('_password_')
 
-    const [errorNome, setErrorNome] = useState('')
-    const [errorEmail, setErrorEmail] = useState('')
-    const [errorPassword, setErrorPassword] = useState('')
-    const [errorConfirmPassword, setErrorConfirmPassword] = useState('')
+    const [isNameError, setIsNameError] = useState(false);
+    const [isEmailError, setIsEmailError] = useState(false)
+    const [isPasswordError, setIsPasswordError] = useState(true)
+    const [isConfirmPasswordError, setIsConfirmPasswordError] = useState(true)
     
     useEffect(() => {
-        if(!email.trim().includes('@') || email == "" || email == null)
-            setErrorEmail('Insira um email valido!')
+        if(!email.trim().includes('@') || email == null)
+            setIsEmailError(true)
         else
-            setErrorEmail('')
-        
-        if(password.length < 10 || password.length > 10 || password == "" || password == null)
-            setErrorPassword('Senha invalida!')
+            setIsEmailError(false)
+
+        if(password.length != 10 || password == null)
+            setIsPasswordError(true)
         else
-            setErrorPassword('')
+            setIsPasswordError(false)
 
         if(nome == "" || nome == null)
-            setErrorNome('Nome invalido')
+            setIsNameError(true)
         else
-            setErrorNome('')
+            setIsNameError(false)
 
         if(confirmPassword != password)
         {
-            setErrorConfirmPassword('As senhas não coincidem')
+            setIsConfirmPasswordError(true)
         }
         else
-            setErrorConfirmPassword('')
+            setIsConfirmPasswordError(false)
         
     }, [nome, email, password, confirmPassword]);
 
     async function storeUser(){
-        if(errorNome == '' && 
-        errorEmail == '' && 
-        errorPassword == '' &&
-        errorConfirmPassword == '')
+        if(!isNameError && 
+            !isEmailError && 
+            !isPasswordError && 
+            !isConfirmPasswordError &&
+            email != '@' &&
+            password != '_password_'
+        )
         {
             try{
                 let resposta = await apiConfig.post('/user/novo',{
@@ -92,13 +95,13 @@ export default function CadastroUsuario()
                     label="Nome"
                     placeholder='Digite seu nome...'
                     onChangeText={text => setNome(text)}
+                    errorMessage={isPasswordError ? 'Nome invalido' : ''}
                     inputContainerStyle={
-                        errorNome == '' ?
+                        !isNameError?
                         estilo.input_container
                         :
                         estilo.input_container_error
                     }
-                    errorMessage={errorNome}
                     leftIcon={
                         <Icon 
                             name='person'
@@ -110,10 +113,11 @@ export default function CadastroUsuario()
                     style={estilo.text_input} 
                     label="Email"
                     placeholder='Digite seu email...'
-                    errorMessage={errorEmail}
+                    errorMessage={isEmailError ? 'Email invalido' : ''}
                     onChangeText={text => setEmail(text)}
                     inputContainerStyle={
-                        errorEmail == '' ?
+                        !isEmailError
+                        ?
                         estilo.input_container
                         :
                         estilo.input_container_error
@@ -131,14 +135,14 @@ export default function CadastroUsuario()
                     placeholder='Deve ter 10 caracteres...'
                     maxLength={10}
                     onChangeText={text => setPassword(text)}
+                    errorMessage={isPasswordError ? 'Senha invalida' : ''}
                     inputContainerStyle={
-                        errorPassword == '' ?
+                        !isPasswordError ?
                         estilo.input_container
                         :
                         estilo.input_container_error
                     }
                     secureTextEntry={passwordVisible}
-                    errorMessage={errorPassword}
                     leftIcon={
                         <Icon 
                             name='password'
@@ -166,10 +170,11 @@ export default function CadastroUsuario()
                     style={estilo.text_input}
                     label="Confirme a senha"
                     placeholder='Repita a senha...'
-                    errorMessage={errorConfirmPassword}
+                    errorMessage={isConfirmPasswordError ? 'Senhas diferentes' : ''}
                     onChangeText={text => setConfirmPassword(text)}
                     inputContainerStyle={
-                        errorConfirmPassword == '' ?
+                        !isConfirmPasswordError
+                        ?
                         estilo.input_container
                         :
                         estilo.input_container_error

@@ -1,12 +1,12 @@
 import { 
     View, 
     StyleSheet, 
-    Alert,
-    Platform } from "react-native";
+    Alert} from "react-native";
 
 import { 
-    Link, 
-    router } from 'expo-router'
+    Link,
+    router
+    } from 'expo-router'
 
 import { Icon } from 'react-native-elements'
 import { useEffect, useState } from "react";
@@ -71,13 +71,7 @@ export default function LoginPage()
                     )
                 }
                 else
-                    return Alert.alert('Ola','Bem vindo',
-                    [
-                        {
-                            text: 'Ok'
-                        }
-                    ]
-            )
+                    router.replace('/(tabs)/');
             }
             catch(error)
             {
@@ -115,7 +109,8 @@ export default function LoginPage()
                     errorMessage={isPasswordError ? 'Senha invalida!' : ''}
                     maxLength={10}
                     inputContainerStyle={
-                        !isPasswordError?
+                        !isPasswordError
+                        ?
                         estilo.input_container
                         :
                         estilo.input_container_error
