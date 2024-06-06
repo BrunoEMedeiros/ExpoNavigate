@@ -71,7 +71,7 @@ export default function LoginPage()
                     )
                 }
                 else
-                    router.replace('/(tabs)/');
+                    router.replace('/(tabs)/home');
             }
             catch(error)
             {
