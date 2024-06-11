@@ -99,6 +99,8 @@ export default function LoginPage()
             Para garantir que a tela só seja mostrada quando as fontes estiverem
             plenamente carregadas usados esse if com o fontsLoaded
         */}
+        { 
+            fontsLoaded ? 
             <Tela>
                 {/* 
                     Exemplo simples de como estilizar a barra de status do celular
@@ -109,8 +111,6 @@ export default function LoginPage()
                     backgroundColor={"transparent"}
                     translucent
                 />
-                { 
-                fontsLoaded ? 
                 <Formulario>
                     <ImagemLogo
                         source={require('../assets/images/sesi.jpg')}
@@ -178,11 +178,11 @@ export default function LoginPage()
                             <Texto>Entrar</Texto>
                         </Botao>              
                     </View>
-                </Formulario> 
-                :
-                <ActivityIndicator />
-                }
+                </Formulario>      
             </Tela>
+             :
+             <ActivityIndicator /> 
+            }
         </ThemeProvider>
     )
 }

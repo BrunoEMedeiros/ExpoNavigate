@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Container, ImagemCard, LabelSala } from "./style";
+import { Link } from "expo-router";
 
 /*
     No react native com TS, quando criamos um component que recebe props ao ser chamado na tela
@@ -17,9 +18,11 @@ type Props = {
 export default function Room({ imagem = 'https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/feaafo.jpg', 
     nome}: Props){
     return(
-        <Container>
+        <Link href={'(horarios)/horarios'} >
+            <Container>
                 <ImagemCard source={{uri: imagem}} />
                 <LabelSala>{nome}</LabelSala>
-        </Container>
+            </Container>
+        </Link>
     )
 }
