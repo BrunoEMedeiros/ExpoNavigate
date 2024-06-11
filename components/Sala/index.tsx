@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import { Container, ImagemCard, LabelSala } from "./style";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 /*
     No react native com TS, quando criamos um component que recebe props ao ser chamado na tela
@@ -17,12 +17,22 @@ type Props = {
 //Caso o link da imagem não seja fornecido, o component vai carregar essa imagem qualquer no lugar
 export default function Room({ imagem = 'https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/feaafo.jpg', 
     nome}: Props){
+
+    const router = useRouter();
+
     return(
-        <Link href={'(horarios)/horarios'} >
+        // <TouchableWithoutFeedback onPress={()=>{
+        //     router.setParams({ name: nome })
+        // }}>
+        <Link href={{
+                pathname: "/(horarios)/horarios",
+                params: { name: nome }
+            }}>
             <Container>
                 <ImagemCard source={{uri: imagem}} />
                 <LabelSala>{nome}</LabelSala>
             </Container>
         </Link>
+        // </TouchableWithoutFeedback>
     )
 }

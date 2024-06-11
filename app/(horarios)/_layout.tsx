@@ -1,11 +1,12 @@
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 export default function StackLayout(){
+
+  const params = useLocalSearchParams();
+  
     return(
-    <Stack screenOptions={{
-        headerShown: false,
-      }}>
-        <Stack.Screen name="horarios" />
+    <Stack>
+        <Stack.Screen name="horarios" options={{ title: params.name?.toString()}}/>
     </Stack>
     )
 }
