@@ -16,32 +16,33 @@ export const Tela = styled.View`
     flex: 1;
     align-content: center;
     justify-content: center;
-    padding: ${(props) => props.theme.sizes.medium * 2}px;
-    background-color: ${(props) => props.theme.colors.backgroud};
+    padding: ${({theme}) => theme.sizes.medium * 2}px;
+    background-color: ${({theme}) => theme.colors.backgroud};
 `
 
 export const Formulario = styled.View`
     gap: 6px;
-    padding: ${(props) => props.theme.sizes.small}px;
+    padding: ${({theme}) => theme.sizes.small}px;
     width: 100%;
-    border-radius: ${(props) => props.theme.sizes.large}px;
+    border-radius: ${({theme}) => theme.sizes.large}px;
     justify-content: center;
     align-items: center;
-    background-color: ${(props) => props.theme.colors.backgroud};
+    background-color: ${({theme}) => theme.colors.backgroud};
     border: 1px solid black;
 `
 export const ImagemLogo = styled.Image`
     width: 100%;
-    height: ${(props) => props.theme.sizes.large * 5}px;
+    height: ${({theme}) => theme.sizes.large * 5}px;
     border-radius: 10px;
-    margin-bottom: ${(props) => props.theme.sizes.large}px;
+    margin-bottom: ${({theme}) => theme.sizes.large}px;
     object-fit: cover;
 `
 //Essa é a forma como estilizar um componente vindo de uma biblioteca de terceiros
 export const InputReactElements = styled(Input)`
-    height: ${(props) => props.theme.sizes.large}px;
-    border-radius: ${(props) => props.theme.sizes.large}px;
+    height: ${({theme}) => theme.sizes.large}px;
+    border-radius: ${({theme}) => theme.sizes.large}px;
     width: 100%;
+    font-family: ${({theme}) => theme.fonts.default};
 `
 // Pressable<ButtonProps> siginifica que esse botao é do tipo
 // ButtonProps que eu declarei ali em cima
@@ -52,12 +53,13 @@ export const Botao = styled.Pressable<ButtonProps>`
     width: 100%;
     justify-content: center;
     align-items: center;
-    padding: ${(props) => props.theme.sizes.small}px;
+    padding: ${({theme}) => theme.sizes.small}px;
     background-color: ${(props) => props.actionButton ? props.theme.colors.primary : props.theme.colors.backgroud};
-    border-radius: ${(props) => props.theme.sizes.large}px;
+    border-radius: ${({theme}) => theme.sizes.large}px;
 `
 
 export const Texto = styled.Text`
-    color: ${(props) => props.theme.colors.font_color};
-    font-size: ${(props) => props.theme.sizes.medium}px;
+    color: ${({theme}) => theme.colors.font_color};
+    font-size: ${({theme}) => theme.sizes.medium}px;
+    font-family: ${({theme}) => theme.fonts.default};
 `
