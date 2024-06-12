@@ -1,19 +1,19 @@
 
 import styled from 'styled-components/native'
 
-export const Container = styled.View`
-    
-    width: 180px;
-    height: 200px;
+export const Container = styled.View` 
+    width: ${({theme}) => theme.sizes.large * 9}px;
+    height: ${({theme}) => theme.sizes.large * 10}px;
     padding: ${({theme}) => theme.sizes.small}px;
     background-color: ${({theme}) => theme.colors.primary_smooth};
-    border-radius: 20px;
-    gap: 10px;
+    border-radius: ${({theme}) => theme.sizes.large}px;
+    gap: ${({theme}) => theme.sizes.small - 4}px;
 `
+
 export const ImagemCard = styled.Image`
     width: 100%;
-    height: 130px;
-    border-radius: 20px;
+    height: ${({theme}) => theme.sizes.large * 6}px;
+    border-radius: ${({theme}) => theme.sizes.large}px;
 `
 
 export const LabelSala = styled.Text`

@@ -23,9 +23,9 @@ export default function Home()
     useEffect(() => {
         apiConfig.get('/salas')
         .then((res)=>{
-            setSalas([...res.data])
+            setSalas(res.data)
         })
-    }, [salas]);
+    }, []);
 
     return(
         // Passo o theme como forma de facilitar minha vida com os estilo e tamanhos

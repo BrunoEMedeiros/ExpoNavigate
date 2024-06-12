@@ -1,8 +1,11 @@
+import Time from "@/components/Horario";
+import theme from "@/theme";
 import { apiConfig } from "@/utils/api";
 import { useState, useEffect } from "react";
 import { FlatList, View, Text } from "react-native";
+import { ThemeProvider } from "styled-components";
 
-interface Horario{
+export interface Horario{
     id: number,
     horario_inicio: string,
     horario_final: string,
@@ -18,20 +21,26 @@ export default function Horarios()
        apiConfig
        .get('/horarios')
        .then((res)=> {
-            setHorarios([...res.data])
+            //console.log(formatDatetoTime(res.data.horario_final))
+            setHorarios(res.data)            
        })
-    }, [horarios]);
+    }, []);
 
     return(
-        <View>
+        <ThemeProvider theme={theme}>
+            <View style={{padding: 20}}>
             {/* <Text style={{fontSize: 30}}>{name}</Text> */}
             <FlatList 
                 data={horarios}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({item}) => {
-                    return <Text>{item.horario_final}</Text>
+                    return <Time horario={item}/>
                 }}
+                ItemSeparatorComponent={()=> (
+                    <View style={{height: 20}}></View>
+                )}            
             />
-        </View>
+            </View>
+        </ThemeProvider>
     )
 }
