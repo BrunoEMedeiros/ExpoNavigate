@@ -16,13 +16,14 @@ export default function Horarios()
 {
     // const {name} = useLocalSearchParams()
     const [horarios, setHorarios] = useState<Horario[]>([])
+    const [horariosSelecionados, setHorarioSelecionado] = useState([])
 
     useEffect(() => {
        apiConfig
        .get('/horarios')
        .then((res)=> {
             //console.log(formatDatetoTime(res.data.horario_final))
-            setHorarios(res.data)            
+            setHorarios(res.data)           
        })
     }, []);
 

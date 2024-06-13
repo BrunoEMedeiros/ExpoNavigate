@@ -27,6 +27,7 @@ import theme from "@/theme";
 //como eu estou usando o theme e la estão cadastradas essas duas,
 //são elas que eu importo para a pagina
 import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
+import userCreate from "@/storage/users/userCreate";
 
 export default function LoginPage()
 {
@@ -81,7 +82,10 @@ export default function LoginPage()
                     )
                 }
                 else
-                    router.replace('/(tabs)/home');
+                {
+                    await userCreate(res.data[0].id, res.data[0].nome)
+                    router.push('/(tabs)/home');
+                }
             }
             catch(error)
             {

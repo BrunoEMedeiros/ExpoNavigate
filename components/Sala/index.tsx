@@ -18,8 +18,6 @@ type Props = {
 export default function Room({ imagem = 'https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/feaafo.jpg', 
     nome}: Props){
 
-    const router = useRouter();
-
     return(
         // <TouchableWithoutFeedback onPress={()=>{
         //     router.setParams({ name: nome })

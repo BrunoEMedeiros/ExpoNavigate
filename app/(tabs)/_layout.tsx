@@ -3,6 +3,7 @@ import { Icon } from "react-native-elements";
 
 export default function TabsNavigation()
 {
+    
     return(
         <Tabs screenOptions={{tabBarActiveTintColor: '#D62828', headerShown: false}}>
             <Tabs.Screen 
@@ -42,6 +43,7 @@ export default function TabsNavigation()
                         size={22}
                         color={color}
                     />
+                
                 }}
             />
         </Tabs>
