@@ -17,7 +17,6 @@ export default function Profile()
             //console.log(storage)
             setUser(storage)
         })
-        
     }, []);
 
     return(

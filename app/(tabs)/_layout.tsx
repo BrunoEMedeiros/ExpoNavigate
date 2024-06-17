@@ -1,9 +1,9 @@
 import { Tabs } from "expo-router";
+import { useEffect } from "react";
 import { Icon } from "react-native-elements";
 
 export default function TabsNavigation()
 {
-    
     return(
         <Tabs screenOptions={{tabBarActiveTintColor: '#D62828', headerShown: false}}>
             <Tabs.Screen 
@@ -14,7 +14,7 @@ export default function TabsNavigation()
                     <Icon 
                         name="home" 
                         type="material"
-                        size={22}
+                        size={30}
                         color={color}
                     />
                 }}
@@ -27,7 +27,7 @@ export default function TabsNavigation()
                     <Icon 
                         name="list" 
                         type="material"
-                        size={22}
+                        size={30}
                         color={color}
                     />
                 }}
@@ -40,7 +40,7 @@ export default function TabsNavigation()
                     <Icon 
                         name="person" 
                         type="material"
-                        size={22}
+                        size={30}
                         color={color}
                     />
                 

@@ -1,6 +1,8 @@
 import Room from "@/components/Sala";
+import getUser from "@/storage/users/userGet";
 import theme from "@/theme";
 import { apiConfig } from "@/utils/api";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import { Divider } from "react-native-elements";
@@ -14,13 +16,24 @@ interface Salas{
     ativo: number
 }
 
+interface Usuario{
+    id: number,
+    nome: string
+}
+
 export default function Home()
 {
     const [salas, setSalas] = useState<Salas[]>([])
-
+    const [user, setUser] = useState<Usuario>()
     //Toda vez que voce quiser que algo aconteça assim que,
     //o component é carregado na tela, use useEffect()
+    
     useEffect(() => {
+        getUser().then((storage)=>{
+            //console.log(storage)
+            setUser(storage)
+        });
+
         apiConfig.get('/salas')
         .then((res)=>{
             setSalas(res.data)
@@ -44,7 +57,11 @@ export default function Home()
                         columnWrapperStyle={{justifyContent: "space-between"}}
                         numColumns={2}
                         renderItem={({item}) =>{
-                            return <Room nome={item.nome} />
+                            return <Room 
+                                id={item.id} 
+                                nome={item.nome} 
+                                id_usuario={user?.id}
+                            />
                         }}
                         showsVerticalScrollIndicator={false}
                         ListEmptyComponent={<Text>Nenhuma sala cadastrada...</Text>}

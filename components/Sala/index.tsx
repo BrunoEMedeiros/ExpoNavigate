@@ -10,21 +10,21 @@ import { Link, useRouter } from "expo-router";
     Nesse caso vou usar o type
 */
 type Props = {
+    id: number,
     imagem?: string,
-    nome: string
+    nome: string,
+    id_usuario?: number
 }
 
 //Caso o link da imagem não seja fornecido, o component vai carregar essa imagem qualquer no lugar
-export default function Room({ imagem = 'https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/feaafo.jpg', 
-    nome}: Props){
+export default function Room({id, imagem = 'https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/imagem_plugin/feaafo.jpg', 
+    nome, id_usuario}: Props){
 
     return(
-        // <TouchableWithoutFeedback onPress={()=>{
-        //     router.setParams({ name: nome })
-        // }}>
+        //Passando o nome e o id da sala como parametro pra tela de horario quando ela abrir
         <Link href={{
                 pathname: "/(horarios)/horarios",
-                params: { name: nome }
+                params: {id: id, name: nome, id_user: id_usuario }
             }}>
             <Container>
                 <ImagemCard source={{uri: imagem}} />

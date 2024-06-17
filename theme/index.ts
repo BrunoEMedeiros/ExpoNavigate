@@ -8,7 +8,9 @@ export default {
     secondary: '#001B29',
     font_color: '#000',
     font_color_white: '#fff',
-    backgroud: '#F8F9FA'
+    backgroud: '#F8F9FA',
+    blue_select_items: '#00b4d8',
+    gray: '#adb5bd'
   },
   fonts: {
     default: 'Inter_400Regular',
